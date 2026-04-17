@@ -1,0 +1,224 @@
+data:
+  domain_size:
+  - 3960.0
+  - 3960.0
+  dt: 5.0
+  dx: 10.0
+  dy: 10.0
+  grid_size:
+  - 396
+  - 396
+  h5_file_path: e:/PYproject/PINN11.11/data/traindata812.h5
+  input_channels: 14
+  normalization_file: e:/PYproject/PINN11.11/data/normalization_stats_complete_14ch_v4.3.json
+  output_channels: 3
+  prediction_steps: 1
+  sampling:
+    active_height_threshold: 0.05
+    active_sampling_ratio: 0.7
+    boundary_points_per_batch: 200
+    data_points_per_batch: 600
+    importance_threshold: 0.01
+    initial_points_per_batch: 300
+    physics_points_per_batch: 900
+    sampling_strategy: adaptive_active
+  sequence_length: 2
+  test_tile_ids:
+  - tile_0012
+  train_tile_ids:
+  - tile_0001
+  - tile_0002
+  - tile_0003
+  - tile_0004
+  - tile_0005
+  - tile_0006
+  - tile_0007
+  - tile_0009
+  - tile_0010
+  - tile_0011
+  val_tile_ids:
+  - tile_0008
+device:
+  auto_detect: true
+  device_id: 0
+  use_amp: true
+  use_data_parallel: false
+logging:
+  console_output: true
+  format: '%(asctime)s - %(levelname)s - %(message)s'
+  level: INFO
+  save_to_file: true
+model:
+  activation: GELU
+  dropout_rate: 0.25
+  grad_clip_value: 1.5
+  hidden_layers: 4
+  hidden_width: 128
+  initialization: xavier_uniform
+  input_channels: 14
+  output_channels: 3
+  output_constraints:
+    height_nonnegative: false
+    velocity_clipping: null
+  use_batch_norm: false
+optimizer:
+  betas:
+  - 0.9
+  - 0.999
+  eps: 1e-8
+  lr: 1e-3
+  type: AdamW
+  weight_decay: 1e-4
+paths:
+  checkpoints_dir: e:/PYproject/new-PINN/checkpoints_pinn
+  data_dir: e:/PYproject/new-PINN/data
+  log_dir: e:/PYproject/new-PINN/logs
+  normalization_file: e:/PYproject/new-PINN/data/normalization_stats_complete_14ch_v4.3.json
+  project_root: e:/PYproject/new-PINN
+  results_dir: e:/PYproject/new-PINN/results_pinn
+  evaluation_dir: e:/PYproject/new-PINN/evaluation_pinn
+physics:
+  active_sampling:
+    active_ratio: 0.7
+    enabled: true
+    height_threshold: 0.05
+    thin_snow_range:
+    - 0.05
+    - 0.5
+    thin_snow_weight: 2.0
+  boundary_conditions:
+    inflow_velocity_threshold: 0.8
+    mass_conservation_weight: 0.1
+    open_boundary_penalty: 1.0
+  continuity_weight: 1.0
+  equations:
+    continuity: true
+    momentum_x: true
+    momentum_y: true
+  height_constraint_weight: 1.0
+  initial_conditions:
+    height_max_limit: 50.0
+    height_range:
+    - 0.5
+    - 8.0
+    non_release_height_threshold: 0.1
+    velocity_threshold: 0.5
+  mass_conservation_weight: 0.5
+  momentum_weight: 1.0
+  enable_boundary_condition_loss: true
+  enable_initial_condition_loss: true
+  physical_params:
+    cohesion: 0.0
+    gravity: 9.81
+    mu_0: 0.155
+    rho: 200.0
+    xi_0: 1000.0
+physics_loss:
+  active_height_threshold: 0.05
+  active_sampling_ratio: 0.7
+  boundary_constraint_weight: 0.3
+  continuity_weight: 1.0
+  enable_enhanced_constraints: true
+  height_constraint_weight: 1.0
+  initial_constraint_weight: 0.1
+  max_loss_value: 1000000.0
+  momentum_x_weight: 1.0
+  momentum_y_weight: 1.0
+  pde_active_pixel_ratio: 0.2
+  pde_inactive_pixel_ratio: 0.05
+  smoothness_constraint_weight: 5.0e-06
+  thin_snow_weight: 0.5
+  volume_conservation_weight: 1.0e-05
+scheduler:
+  T_0: 40
+  T_mult: 2
+  eta_min: 1e-6
+  type: CosineAnnealingWarmRestarts
+training:
+  adaptive_weights:
+    adjustment_frequency: 10
+    enabled: false
+    final_momentum_weight: 1.2
+    momentum_loss_weight: 0.8
+  batch_size: 8
+  boundary_loss_weight: 0.1
+  data_loss_weight: 1.0
+  final_lr: 1e-6
+  gradient_method: finite_diff
+  initial_loss_weight: 0.1
+  initial_lr: 5e-4
+  data_only_epochs: 50
+  physics_intro_epochs: 100
+  initial_physics_weight: 0.01
+  loss_weights:
+    boundary_loss: 0.0
+    data_loss: 1.0
+    initial_loss: 0.0
+    physics_loss: 1.0
+  lr_scheduler: cosine_annealing
+  min_delta: 1e-6
+  mode: progressive
+  num_epochs: 300
+  num_workers: 0
+  patience: 120
+  physics_loss_weight: 1.0
+  pin_memory: false
+  prefetch_factor: 1
+  random_seed: 42
+  save_frequency: 10
+  val_frequency: 5
+  reduce_on_plateau: true
+  plateau_factor: 0.5
+  plateau_patience: 8
+  plateau_min_lr: 1e-6
+  grad_clip_value: 0.5
+  smape_weight: 0.0
+  height_max_value: 50.0
+  height_neg_penalty: 0.0
+  height_over_penalty: 0.0
+  velocity_l2_penalty: 0.0
+  channel_loss_weights:
+    height: 14.0
+    velocity_x: 1.0
+    velocity_y: 1.0
+  active_region_weight: 14.0
+  height_distribution_align_weight: 0.0
+  height_peak_align_weight: 0.0
+  height_peak_percentile: 0.97
+  post_validation_viz_threshold: 0.95
+  augment:
+    enable: true
+    time_neighbor_shift_prob: 0.5
+    noise_std: 0.015
+validation:
+  metrics:
+  - mse
+  - mae
+  - rmse
+  - r2
+  physics_check: true
+  save_frequency: 50
+  save_predictions: true
+visualization:
+  dpi: 300
+  plot_fields:
+  - height
+  - velocity_x
+  - velocity_y
+  plot_interval: 20
+  plot_results: true
+  plot_training: true
+  save_format:
+  - png
+  - pdf
+classic_pinn:
+  collocation_points_per_epoch: 5000
+  supervised_points_per_epoch: 2000
+  initial_boundary_points_per_epoch: 1000
+  initial_time_index: 0
+  predict_time_index: 1
+  weights:
+    pde: 1.0
+    ic: 1.0
+    bc: 1.0
+    data: 0.2
