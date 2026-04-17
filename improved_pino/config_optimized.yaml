@@ -1,0 +1,209 @@
+
+data:
+  h5_file_path: 'E:/PYproject/PINO924/data/traindata812.h5'
+  train_tile_ids: ['tile_0001', 'tile_0002', 'tile_0003', 'tile_0004', 'tile_0005', 'tile_0006', 'tile_0007', 'tile_0009', 'tile_0010', 'tile_0011']
+  val_tile_ids: ['tile_0008']
+  test_tile_ids: ['tile_0012']
+  sequence_length: 1
+  prediction_steps: 1
+  mode: 'single_step'
+  normalize: true
+  dx: 10.0
+  dy: 10.0
+  dt: 1.0
+  boundary_condition: 'open'
+  group_by_time_pair: true
+  group_by_time_scale: false
+  time_scale_tolerance: 0.1
+  physical_domain:
+    x_range: 3960.0
+    y_range: 3960.0
+    global_x_min: 535383.51
+    global_x_max: 545343.51
+    global_y_min: 3165772.9
+    global_y_max: 3173732.9
+    t_min: 0.0
+    t_max: 200.0
+    grid_size: [396, 396]
+    cell_size: 10.0
+    dem_min: 2737.62
+    dem_max: 5740.0
+
+dataset:
+  train_data_path: 'E:/PYproject/PINO924/data/traindata812.h5'
+  val_data_path: 'E:/PYproject/PINO924/data/traindata812.h5'
+  test_data_path: 'E:/PYproject/PINO924/data/traindata812.h5'
+  normalize: true
+  normalization_method: 'mixed'
+  load_precomputed_stats: true
+  sequence_length: 1
+  prediction_steps: 1
+  boundary_condition: 'open'
+
+model:
+  modes1: 16
+  modes2: 16
+  width: 64
+  n_layers: 4
+  in_channels: 14
+  out_channels: 3
+  in_dim: 6
+  static_dim: 4
+  physics_params: 4
+  boundary_condition: "open"
+  dropout: 0.25
+  use_physics_head: false
+  max_height: 36.3
+  max_velocity: 76.8
+  velocity_scale_init: 15.0
+
+training:
+  batch_size: 2
+  num_epochs: 150
+  learning_rate: 0.0008
+  weight_decay: 0.001
+  patience: 50
+  min_delta: 0.0005
+  save_interval: 10
+  num_workers: 0
+  pin_memory: true
+  gradient_clip: 1.5
+  epochs: 150
+  val_batch_size: 2
+  scheduler_T0: 15
+  scheduler_T_mult: 2
+  min_lr: 0.00005
+  
+  mode: "physics_constrained"
+  
+  data_driven:
+    enable_physics_loss: false
+    enable_initial_condition_loss: false
+    enable_boundary_condition_loss: false
+    physics_weight: 0.0
+    initial_condition_weight: 0.0
+    boundary_condition_weight: 0.0
+    focus_on_data_fitting: true
+    
+  physics_constrained:
+    enable_physics_loss: true
+    enable_initial_condition_loss: true
+    enable_boundary_condition_loss: true
+    physics_weight: 0.8
+    initial_condition_weight: 0.5
+    boundary_condition_weight: 0.3
+    data_only_epochs: 5
+    progressive_physics: true
+  
+  min_batch_size: 1
+  batch_reduction_factor: 0.5
+  batch_reduction_interval: 100
+  
+  loss_clamp_min: 1.0e-8
+  loss_clamp_max: 1.0e6
+  
+  height_clamp_min: 0.0
+  height_clamp_max: 36.3
+  velocity_clamp_min: -76.8
+  velocity_clamp_max: 76.8
+
+scheduler:
+  type: "CosineAnnealingLR"
+  eta_min: 0.00005
+  verbose: true
+
+paths:
+  data_dir: "E:/PYproject/PINO924/data"
+  checkpoint_dir: "E:/PYproject/PINO924/checkpoints_optimized1"
+  log_dir: "E:/PYproject/PINO924/logs_optimized1"
+  output_dir: "E:/PYproject/PINO924/results_optimized1"
+  results_dir: "E:/PYproject/PINO924/results_optimized1"
+  visualization_dir: "E:/PYproject/PINO924/visualizations_optimized1"
+  normalization_stats_path: "E:/PYproject/PINO924/data/normalization_stats_complete_14ch_v4.3.json"
+
+validation:
+  save_predictions: true
+  save_interval: 15
+  metrics: ["mse", "mae", "physics_loss", "height_range", "velocity_range"]
+
+super_resolution:
+  enable: true
+  target_scale: 2
+  num_iterations: 10
+  lr: 0.0001
+
+physics:
+  module_type: "dimensionless"
+  enable_physics_loss: true
+  enable_initial_condition_loss: true
+  enable_boundary_condition_loss: true
+  physics_loss_interval: 3
+  compute_in_original_units: true
+  continuity_weight: 1.0
+  momentum_weight: 1.5
+  height_constraint_weight: 15.0
+  height_scale_weight: 2.0
+  boundary_condition: "open"
+  enable_mass_conservation: true
+  mass_conservation_weight: 1.8
+  enable_active_region_sampling: true
+  active_height_threshold: 0.05
+  active_region_sample_ratio: 0.8
+  inactive_region_sample_ratio: 0.2
+  min_active_points: 30
+  gravity: 9.81
+  friction_coeff: 0.025
+  density: 300.0
+  initial_condition_tolerance: 0.02
+  release_area_height_range: [0.5, 8.0]
+
+device:
+  use_cuda: true
+  cuda_device: 0
+
+seed: 42
+
+normalization:
+  method: 'mixed'
+  load_precomputed: true
+  stats_file: 'E:/PYproject/PINO924/data/normalization_stats_complete_14ch_v4.3.json'
+  height_method: 'standard'
+  velocity_method: 'standard'
+  physics_method: 'minmax'
+  dem_method: 'minmax'
+  gradient_method: 'standard'
+  coordinate_method: 'minmax'
+  time_method: 'minmax'
+  height_threshold_weights:
+    thin_snow_threshold: 0.5
+    thin_snow_weight: 2.0
+    thick_snow_weight: 1.0
+  save_stats: false
+  height_range: [0.0, 36.3]
+  velocity_range: [-76.8, 76.8]
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(levelname)s - %(message)s"
+  save_to_file: true
+  console_output: true
+  log_physics_details: true
+  log_prediction_ranges: true
+
+device:
+  use_cuda: true
+  cuda_device: 0
+  mixed_precision: true
+
+seed: 42
+
+experiment:
+  name: "optimized_pino_avalanche_v2"
+  description: "优化版PINO雪崩模拟：解决速度过拟合、扩大高度范围、统一物理域"
+  tags: ["pino", "avalanche", "optimized", "v2", "fixed_overfitting"]
+  
+debug:
+  enable_range_monitoring: true
+  save_intermediate_results: true
+  physics_loss_detailed_log: true
+  initial_condition_analysis: true
