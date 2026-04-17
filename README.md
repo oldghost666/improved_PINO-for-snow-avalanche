@@ -8,7 +8,6 @@ This project is a deep learning framework based on **Physics-Informed Neural Ope
 - **Advanced Architecture**: Adopts an improved FNO structure, introducing multi-scale feature fusion, channel attention mechanisms, and residual connections to significantly enhance the model's expressive power.
 - **Physics-Driven**: Introduces a dimensionless physics loss function, directly imposing continuity and momentum conservation constraints in both frequency and spatial domains.
 - **Progressive Training**: Supports a progressive training strategy from pure data-driven to physics-constrained, balancing convergence speed and physical realism.
-- **Stable and Reliable**: Built-in numerical stability protection mechanisms, including output range clipping, gradient clipping, and mixed normalization strategies.
 - **Industrial-Grade Configuration**: Comprehensive YAML configuration file management, supporting highly flexible hyperparameter adjustment.
 
 ---
